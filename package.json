@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
+    "rsshub": "^1.0.0-master.bda9d72",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"

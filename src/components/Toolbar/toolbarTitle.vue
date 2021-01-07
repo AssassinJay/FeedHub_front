@@ -11,7 +11,7 @@ export default {
   name: 'toolbarTitle',
   data () {
     return {
-      title: 'CIMO'
+      title: 'FeedHub'
     }
   }
 }
