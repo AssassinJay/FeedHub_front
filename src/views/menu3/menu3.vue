@@ -207,7 +207,7 @@ export default {
         }
       }
       this.$fetchData(query).then(res=>{
-        if(res.data.data.error_code===0){
+        if(res.data.error_code===0){
           this.$q.notify({
             icon: 'insert_emoticon',
             message: '添加订阅成功！',
