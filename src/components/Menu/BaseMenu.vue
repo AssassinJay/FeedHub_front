@@ -12,7 +12,7 @@
       </q-list>
 
       <!-- 底部说明 -->
-      <bottom-link/>
+<!--      <bottom-link/>-->
 
     </div>
   </q-scroll-area>
@@ -21,10 +21,13 @@
 <script>
 import { thumbStyleOfMenu } from '../BaseContent/thumbStyle'
 import BaseMenuItem from './BaseMenuItem'
-import BottomLink from './BottomLink'
+// import BottomLink from './BottomLink'
 export default {
   name: 'base-menu',
-  components: { BaseMenuItem, BottomLink },
+  components: {
+    BaseMenuItem
+    // BottomLink
+  },
   data () {
     return {
       menuList: this.$store.getters.getRoutes[0].children,

@@ -16,10 +16,10 @@
       <q-tooltip>创建</q-tooltip>
     </q-btn>
     <q-btn round dense flat color="grey-8" icon="apps" v-if="$q.screen.gt.sm">
-      <q-tooltip>应用</q-tooltip>
+      <q-tooltip>订阅市场</q-tooltip>
     </q-btn>
-    <q-btn round dense flat color="grey-8" icon="message" v-if="$q.screen.gt.sm">
-      <q-tooltip>消息</q-tooltip>
+    <q-btn round dense flat color="grey-8" icon="nightlight_round" v-if="$q.screen.gt.sm" @click="handleDarkMode">
+      <q-tooltip>夜间模式</q-tooltip>
     </q-btn>
     <q-btn round dense flat color="grey-8" icon="notifications">
       <q-badge color="red" text-color="" floating>
@@ -36,7 +36,7 @@
               <img :src="this.$PUBLIC_PATH + 'data/avatar.jpg'">
             </q-avatar>
 
-            <div class="text-subtitle1 q-mt-md q-mb-xs">Hi！ CIMO</div>
+            <div class="text-subtitle1 q-mt-md q-mb-xs">Hi!{{user_name}}</div>
 
             <q-btn
               color="primary"
@@ -57,13 +57,15 @@
 </template>
 
 <script>
+import { Dark } from 'quasar'
 export default {
   name: 'toolbarItemRight',
   data () {
     return {
       search: '',
       mobileData: false,
-      bluetooth: true
+      bluetooth: true,
+      user_name: sessionStorage.getItem('user_name')
     }
   },
   methods: {
@@ -94,6 +96,9 @@ export default {
       this.$store.commit('LOGOUT')
       this.$router.push('/')
       window.sessionStorage.clear()
+    },
+    handleDarkMode () {
+      Dark.toggle()
     }
   }
 }

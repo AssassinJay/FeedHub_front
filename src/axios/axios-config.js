@@ -1,13 +1,13 @@
 import Axios from 'axios'
 import Vue from 'vue'
 import { Notify } from 'quasar'
-
+/* eslint-disable */
 /**
  * axios 初始化
  */
 
 const axios = Axios.create({
-  // baseURL: Vue.prototype.$baseURL, // 请求基地址
+  baseURL: Vue.prototype.$baseURL, // 请求基地址
   timeout: Vue.prototype.$timeOut // 超时时间
 })
 
@@ -15,8 +15,10 @@ const axios = Axios.create({
 axios.interceptors.request.use(
   config => {
     const token = sessionStorage.getItem('access_token')
-    if (token && config.type) {
-      config.headers.Authorization = 'Bearer ' + token
+    if(token){
+      config.headers.access_token = token
+    }
+    if (config.type) {
       switch (config.type) {
         case 'FORM-DATA':
           config.transformRequest = [data => { return 'args=' + JSON.stringify(data) }]

@@ -1,145 +1,71 @@
 <template>
 
   <base-content>
-    <div class="container q-pa-lg q-col-gutter-md">
-      <div class="row justify-between q-col-gutter-md">
-        <div class="col-xs-12 col-md-3 q-gutter-md">
-          <q-card class="income ">
-            <q-card-section horizontal>
-              <q-card-section class="col">
-                <div class="text-subtitle2 text-white">
-                  Income
-                  <q-icon color="yellow" name="trending_up"/>
-                </div>
-                <div class="text-h6 q-mt-sm q-mb-xs text-white">
-                  <countTo :startVal='906584' :endVal='952765' :duration='1500'/>
-                  ¥
-                </div>
-              </q-card-section>
-              <q-card-section class="col">
-                <div style="height: 100%;max-width: 150px">
-                  <v-chart :options="income"/>
-                </div>
-              </q-card-section>
-            </q-card-section>
-          </q-card>
-          <q-card class="expense ">
-            <q-card-section horizontal>
-              <q-card-section class="col">
-                <div class="text-subtitle2 text-white">
-                  Expense
-                  <q-icon color="green" name="trending_down"/>
-                </div>
-                <div class="text-h6 q-mt-sm q-mb-xs text-white">
-                  <countTo :startVal='400326' :endVal='439956' :duration='1500'/>
-                  ¥
-                </div>
-              </q-card-section>
-              <q-card-section class="col">
-                <div style="height: 100%;width: 150px">
-                  <v-chart :options="expense"/>
-                </div>
-              </q-card-section>
-            </q-card-section>
-          </q-card>
-          <q-card class="total ">
-            <q-card-section horizontal>
-              <q-card-section class="col">
-                <div class="text-subtitle2 text-white">
-                  Total
-                  <q-icon color="yellow" name="trending_up"/>
-                </div>
-                <div class="text-h6 q-mt-sm q-mb-xs text-white">
-                  <countTo :startVal='706198' :endVal='756268' :duration='1500'/>
-                  ¥
-                </div>
-              </q-card-section>
-              <q-card-section class="col">
-                <div style="height: 100%;width: 150px">
-                  <v-chart class="" :options="total"/>
-                </div>
-              </q-card-section>
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-md-9">
-          <q-card class="cimo-shadow col-11" style="height: 100%;min-height:390px;padding: 3px;">
-            <v-chart class="" :options="charts2Option" autoresize/>
-          </q-card>
-        </div>
-      </div>
-      <div class="row q-col-gutter-md">
-        <div class="col-xs-12 col-md-3">
-          <q-card class="cimo-shadow" style="height: 430px; width: 100%; padding: 3px">
-            <v-chart class="" :options="chartPie" autoresize/>
-          </q-card>
-        </div>
-        <div class="col-xs-12 col-md-3">
-          <q-card class="my-card cimo-shadow">
-            <q-img
-              :src="this.$PUBLIC_PATH + 'data/bird.jpg'"
-            />
-            <q-card-section>
-              <div class="text-overline text-orange-9">Overline</div>
-              <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
-            </q-card-section>
-            <q-card-actions>
-              <q-btn flat color="dark" label="Share"/>
-              <q-btn flat color="primary" label="Book"/>
+    <q-ajax-bar
+      ref="bar"
+      position="bottom"
+      color="accent"
+      size="30px"
+      skip-hijack
+    />
 
-              <q-space/>
+    <div class="container flex justify-center" style="margin-top: 30px;">
+      <div style="width: 1000px;">
+        <h3 style="margin-bottom: 10px;margin-left: 10px;margin-top: 0px">Today</h3>
+        <p style="margin-left: 10px;font-size: 20px;color: slategrey">The insights you need to keep ahead
+        </p>
+        <div style="width: 1200px;">
+          <div style="width: 500px;margin: 20px;float: left;" v-for="feed in TodayFeedList" :key="feed.title">
+            <q-card class="my-card">
+              <q-card-section>
+                <div class="text-h6">{{feed.title}}</div>
+<!--                <div class="text-subtitle2">by John Doe</div>-->
+              </q-card-section>
 
-              <q-btn
-                color="grey"
-                round
-                flat
-                dense
-                :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-                @click="expanded = !expanded"
-              />
-            </q-card-actions>
+              <q-separator />
 
-            <q-slide-transition>
-              <div v-show="expanded">
-                <q-separator/>
-                <q-card-section class="text-subitle2">
-                  {{ lorem }}
-                </q-card-section>
-              </div>
-            </q-slide-transition>
-          </q-card>
+              <q-card-actions vertical>
+                <q-list>
+                  <q-item v-for="item in feed.items" :key="item.title" class="feeditems" style="border-radius: 10px;" clickable>
+                    <q-item-section @click="openRSSPad(item)" style="cursor:pointer;">
+                      <q-item-label>{{item.title}}</q-item-label>
+                      <q-item-label caption lines="2">{{item.description | deleteHtmlTag}}</q-item-label>
+                    </q-item-section>
+                    <div style="height: 50px;">
+                      <q-item-label caption>{{item.pubDate|filterTime}}</q-item-label>
+                      <div>
+                        <q-btn class="gt-xs" size="12px" flat dense round icon="link"  @click="gotoLink(item.originalLink)"/>
+                      </div>
+                    </div>
+                  </q-item>
+                  <q-separator spaced inset />
+                </q-list>
+<!--                <q-btn flat>Action 1</q-btn>-->
+<!--                <q-btn flat>Action 2</q-btn>-->
+              </q-card-actions>
+            </q-card>
+          </div>
         </div>
-        <div class="col-xs-12 col-md-6">
-          <q-table
-            class="cimo-shadow"
-            :grid="$q.screen.xs"
-            title="Treats"
-            :data="data"
-            :columns="columns"
-            :filter="filter"
-            row-key="name"
-            style="height: 430px;"
-          >
-            <template v-slot:top-right>
-              <q-input dense debounce="300" v-model="filter" placeholder="Search">
-                <template v-slot:append>
-                  <q-icon name="search"/>
-                </template>
-              </q-input>
-            </template>
-            <template v-slot:body="props">
-              <q-tr :props="props">
-                <q-td key="name" :props="props">{{ props.row.name }}</q-td>
-                <q-td key="calories" :props="props">{{ props.row.calories }}</q-td>
-                <q-td key="fat" :props="props">{{ props.row.fat }}</q-td>
-                <q-td key="carbs" :props="props">{{ props.row.carbs }}</q-td>
-                <q-td key="operating" :props="props">
-                  <q-btn class="btn-table text-white" icon="tune" label="详情" @click="handleTableClick(props.row)"/>
-                </q-td>
-              </q-tr>
-            </template>
-          </q-table>
-        </div>
+<!--        <template>-->
+<!--          <div class="q-pa-md" style="max-width: 1000px;" v-for="feed in TodayFeedList" :key="feed.title">-->
+<!--            <div style="margin: 0px;font-size: 26px;margin-left: 20px">{{feed.title}}</div>-->
+<!--            <q-list>-->
+<!--              <q-item v-for="item in feed.items" :key="item.title" class="feeditems" style="border-radius: 10px;" clickable>-->
+<!--                <q-item-section @click="openRSSPad(item)" style="cursor:pointer;">-->
+<!--                  <q-item-label>{{item.title}}</q-item-label>-->
+<!--                  <q-item-label caption lines="2">{{item.description | deleteHtmlTag}}</q-item-label>-->
+<!--                </q-item-section>-->
+<!--                <div style="height: 50px;">-->
+<!--                  <q-item-label caption>{{item.pubDate|filterTime}}</q-item-label>-->
+<!--                  <div>-->
+<!--                    <q-btn class="gt-xs" size="12px" flat dense round icon="link"  @click="gotoLink(item.originalLink)"/>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </q-item>-->
+<!--              <q-separator spaced inset />-->
+<!--            </q-list>-->
+<!--          </div>-->
+<!--        </template>-->
       </div>
     </div>
   </base-content>
@@ -147,216 +73,161 @@
 </template>
 
 <script>
-import countTo from 'vue-count-to'
+/* eslint-disable */
+// import countTo from 'vue-count-to'
 import BaseContent from '../../components/BaseContent/BaseContent'
-import { thumbStyle } from '../../components/BaseContent/thumbStyle'
-import chartPie from '../../assets/js/echarts-1'
-import charts2Option from '../../assets/js/echarts-2'
-import { income, expense, total } from '../../assets/js/echarts-3'
-import chartZ from '../../assets/js/echarts-4'
-
+// import { thumbStyle } from '../../components/BaseContent/thumbStyle'
+// import chartPie from '../../assets/js/echarts-1'
+// import charts2Option from '../../assets/js/echarts-2'
+// import { income, expense, total } from '../../assets/js/echarts-3'
+// import chartZ from '../../assets/js/echarts-4'
+// import { Dark } from 'quasar'
+import { QAjaxBar } from 'quasar'
+// import RSSPad from '../../components/RSSPad/RSSPad'
 export default {
   name: 'home',
   components: {
     BaseContent,
-    countTo
+    QAjaxBar,
+    // RSSPad
+    // countTo
   },
   data () {
     return {
-      expanded: false,
-      chartPie,
-      chartZ,
-      charts2Option,
-      income,
-      expense,
-      total,
-      thumbStyle,
-      lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      filter: '',
-      columns: [
-        {
-          name: 'name',
-          required: true,
-          label: 'Dessert (100g serving)',
-          align: 'left',
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'calories',
-          align: 'center',
-          label: 'Calories',
-          field: 'calories',
-          sortable: true
-        },
-        {
-          name: 'fat',
-          label: 'Fat (g)',
-          field: 'fat',
-          sortable: true
-        },
-        {
-          name: 'carbs',
-          label: 'Carbs (g)',
-          field: 'carbs'
-        },
-        {
-          name: 'operating',
-          label: 'operating',
-          align: 'center',
-          field: 'operating',
-          sortable: true
-        }
-      ],
-      data: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65
-        }
-      ]
+      TodayFeedList: [],
+      showRSSPad: false,
+      LaterLinks:[]
     }
   },
   methods: {
-    handleTableClick (e) {
-      this.$router.push({
-        path: `tableDetail/${e.name}`
+    getTodayFeed () {
+      var query = {
+        url: '/feed/getFeed'
+      }
+      this.$fetchData(query).then(res => {
+        if (res.data.error_code === 0) {
+          this.TodayFeedList = res.data.data.feeds
+        }
+      })
+    },
+    openRSSPad (item) {
+      // let url = item.origin_link
+        // <div class='linkBtn' onclick='window.open(url)'>VISIT WEBSITE</div>
+      var loaded_html = "<div style='display: flex;justify-content: center;min-width:1000px'><div style='max-width: 900px;min-width: 800px;' class='RSSPad'>"+item.description+"</div></div>"
+      var style = "<style>.RSSPad img{max-width: 600px} .linkBtn{cursor: pointer;width: 150px;height: 30px;border-radius: 15px;border: 1px solid lightgrey;text-align: center;line-height: 30px}</style>"
+      loaded_html += style;
+      this.$q.dialog({
+        title: item.title,
+        message: loaded_html,
+        html: true,
+        style: "max-width:1600px;width:1200px;min-width:1000px"
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    gotoLink(url){
+      window.open(url)
+    },
+    addLaterItem(item){
+      var query = {
+        url: '/readLater/add_item',
+        params: {
+          link: item.originalLink
+        }
+      }
+      this.$fetchData(query).then(res => {
+        if(res.data.error_code===0){
+          this.$q.notify({
+            icon: 'insert_emoticon',
+            message: '已添加至稍后读!',
+            color: 'green',
+            position: 'top',
+            timeout: 1500
+          })
+          this.LaterLinks.push(item.originalLink)
+        }
+      });
+    },
+    getLaterLinks(){
+      var query = {
+        url: '/readLater/getLinks'
+      }
+      this.$fetchData(query).then(res => {
+        if(res.data.error_code === 0){
+          this.LaterLinks = res.data.data
+        }
+      })
+    },
+    deleteLaterItem(link){
+      var query = {
+        url: '/readLater/deleteItem',
+        params: {
+          link:link
+        }
+      }
+      this.$fetchData(query).then(res => {
+        if(res.data.error_code===0){
+          this.LaterTitles.splice(this.LaterTitles.indexOf(title),1);
+        }
       })
     }
+  },
+  filters: {
+    ellipsis (value) {
+      if (!value) return ''
+      if (value.length > 50) {
+        return value.slice(0, 50) + '...'
+      }
+      return value
+    },
+    filterTime(old){
+      let now=new Date().getTime();
+      let old_time = Date.parse(old);
+      let time=now-old_time;
+      let str=''
+      if(time>=0&&time<1000*60){
+        str='刚刚'
+      }else if(time>=1000*60&&time<1000*60*2){
+        str='1分钟前'
+      }else if(time>=1000*60*2&&time<1000*60*3){
+        str='2分钟前'
+      }else if(time>=1000*60*3&&time<1000*60*60){
+        str='1小时前'
+      }else if(time>=1000*60*60&&time<1000*60*60*2){
+        str='2小时前'
+      }else if(time>=1000*60*60*2&&time<1000*60*60*24){
+        str='好几个小时前'
+      }else if(time>=1000*60*60*24&&time<1000*60*60*24*2){
+        str='1天前'
+      }else if(time>=1000*60*60*24*2&&time<1000*60*60*24*3){
+        str='2天前'
+      }else if(time>=1000*60*60*24*3&&time<1000*60*60*24*30){
+        str='1月前'
+      }else{
+        str=old
+      }
+      return str
+    },
+    deleteHtmlTag (str) {
+      return str.replace(/<[^>]+>/g,"");
+    }
+},
+  created () {
+    this.getTodayFeed()
+    // this.getLaterLinks()
   }
 }
 </script>
 <style lang="css" scoped>
-  .my-card {
-    width: 100%;
-    min-height: 390px;
-    height: 100%;
-    /*max-width: 350px;*/
-  }
+.feeditems:hover {
 
-  .income {
-    width: 100%;
-    background: linear-gradient(to right, #68E4BC 0%, #4AD0D1 99%);
-    border-radius: 5px;
-    font-size: 14px;
-    padding: 11px 15px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    color: #ffffff;
-    box-shadow: 0 12px 12px -11px #0db4afb8;
-    background-size: 200% auto;
-  }
-
-  .income:hover {
-    background-position: right center;
-    box-shadow: 0 12px 20px -11px #0db4afb8;
-  }
-
-  .expense {
-    width: 100%;
-    background: linear-gradient(to left, #FCAC94 0%, #f3a183 98%);
-    border-radius: 5px;
-    font-size: 14px;
-    padding: 11px 15px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    color: #ffffff;
-    box-shadow: 0 12px 12px -11px #FCA76C;
-    background-size: 200% auto;
-  }
-
-  .expense:hover {
-    background-position: right center;
-    box-shadow: 0 12px 20px -11px #FCA76C;
-  }
-
-  .total {
-    width: 100%;
-    background: linear-gradient(90deg, #F073C8 0%, #FF6A95 99%);
-    border-radius: 5px;
-    font-size: 14px;
-    padding: 11px 15px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    color: #ffffff;
-    box-shadow: 0 12px 12px -11px rgba(240, 115, 200, 0.73);
-    background-size: 200% auto;
-  }
-
-  .total:hover {
-    background-position: right center;
-    box-shadow: 0 12px 20px -11px rgba(240, 115, 200, 0.73);
-  }
-
-  .btn-table {
-    background: linear-gradient(to right, #36d1dc, #5b86e5);
-    transition: all 0.3s ease-in-out;
-  }
-
-  .btn-table:hover {
-    background-position: right center;
-    box-shadow: 0 12px 20px -11px #5b86e5;
-  }
+    background-color: lightgray;
+}
+.RSSPad img{
+  max-width: 800px;
+}
 </style>

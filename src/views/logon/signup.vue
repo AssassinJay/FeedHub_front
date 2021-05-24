@@ -1,9 +1,8 @@
 <template>
 
   <div class="flex justify-center items-center" style="height: 100vh">
-
     <div class="row base-card-shadow" style="width: 60vw;min-width: 300px">
-      <div class="col-6 flex justify-center items-center " v-show="$q.screen.gt.sm">
+      <div class="col-6 flex justify-center items-center " v-show="true">
         <q-skeleton type="text" height="70%" width="50%" v-if="!isLottieF"/>
         <lottie-web-cimo align="right" style="height: 70%" :path="defaultOptions.path" @isLottieFinish="handleFinish"/>
       </div>
@@ -11,26 +10,38 @@
       <div class="col flex justify-center items-center">
         <q-card square style="min-width: 290px;height: 100%; width: 60%;" class="no-shadow">
           <q-card-section align="center">
-            <h3 class="text-uppercase">login</h3>
+            <h3 class="text-uppercase">SIGNUP</h3>
             <!-- 用户名 -->
             <q-input class="logon-input"
-               clearable
-               standout="bg-cyan text-white"
-               bottom-slots
-               v-model="username"
-               label="账号"
+                     clearable
+                     standout="bg-cyan text-white"
+                     bottom-slots
+                     v-model="username"
+                     label="账号"
             >
               <template v-slot:prepend>
                 <q-icon name="account_circle"/>
               </template>
             </q-input>
+<!--            昵称-->
+            <q-input class="logon-input"
+                     clearable
+                     standout="bg-cyan text-white"
+                     bottom-slots
+                     v-model="nickname"
+                     label="昵称"
+            >
+              <template v-slot:prepend>
+                <q-icon name="emoji_emotions"/>
+              </template>
+            </q-input>
             <!-- 密码 -->
             <q-input class="logon-input"
-               standout="bg-cyan text-white"
-               bottom-slots
-               v-model="password"
-               label="密码"
-               :type="isPwd ? 'password' : 'text'" hint=""
+                     standout="bg-cyan text-white"
+                     bottom-slots
+                     v-model="password"
+                     label="密码"
+                     :type="isPwd ? 'password' : 'text'" hint=""
             >
               <template v-slot:prepend>
                 <q-icon name="vpn_key"/>
@@ -43,21 +54,9 @@
                 />
               </template>
             </q-input>
-
-            <!-- 登录按钮 -->
-            <q-btn
-              :loading="loading"
-              class="logon-btn bg-logon-card-input"
-              text-color="white"
-              unelevated
-              label=""
-              style="font-size: large;"
-              @click="logon"
-            >登 录 系 统
-            </q-btn>
             <div class="row justify-between" style="margin-bottom: 20px;">
-<!--              <q-btn flat label="忘记密码"/>-->
-              <q-btn outline label="我要注册" @click="gotoSignup"/>
+              <q-btn flat label="返回登录" @click="gotoLogin"/>
+              <q-btn color="primary" label= "申请注册" @click="handleSignup"/>
             </div>
           </q-card-section>
         </q-card>
@@ -68,63 +67,53 @@
 </template>
 
 <script>
+/* eslint-disable */
 import LottieWebCimo from '../../components/LottieWebCimo/lottie-web-cimo'
 
 export default {
-  name: 'logon',
+  name: 'signup',
   data () {
     return {
       isPwd: true,
-      username: 'ZhangKaijie',
-      password: '123456',
+      username: '',
+      password: '',
+      nickname: '',
+      loading: false,
+      percentage: 0,
+      isLottieF: true,
       defaultOptions: {
         path: 'https://assets9.lottiefiles.com/packages/lf20_vo0a1yca.json',
         loop: true
-      },
-      loading: false,
-      percentage: 0,
-      isLottieF: false
+      }
     }
   },
   components: { LottieWebCimo },
   methods: {
-    gotoSignup () {
-      this.$router.push('/signup')
-    },
-    logon () {
-      this.loading = !this.loading
+    handleSignup () {
       var query = {
-        url: '/account/login',
-        params: {
-          username: this.username,
-          password: this.password
+        url:"/account/signup",
+        params:{
+          username:this.username,
+          nickname:this.nickname,
+          password:this.password
         }
       }
-      this.$fetchData(query).then(res => {
-        console.log(res)
-        if (res.data.error_code === 0) {
-          sessionStorage.setItem('access_token', res.data.data.access_token)
-          sessionStorage.setItem('user_role', 'user')
-          sessionStorage.setItem('user_name', this.username)
-          this.$router.push('/')
+      this.$fetchData(query).then(res=>{
+        if(res.data.error_code===0){
           this.$q.notify({
             icon: 'insert_emoticon',
-            message: 'hi，欢迎回来',
+            message: '注册成功!',
             color: 'green',
             position: 'top',
             timeout: 1500
           })
-        } else if (res.data.error_code === 1002) {
-          this.$q.notify({
-            icon: 'insert_emoticon',
-            message: '用户不存在!',
-            color: 'orange',
-            position: 'top',
-            timeout: 1500
-          })
+          this.gotoLogin()
         }
+
       })
-      this.loading = !this.loading
+    },
+    gotoLogin () {
+      this.$router.push('/login')
     },
     handleFinish (e) {
       this.isLottieF = e

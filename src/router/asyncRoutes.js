@@ -7,7 +7,7 @@ const asyncRoutesChildren = [
     path: '/',
     name: 'home',
     meta: {
-      roles: ['admin', 'editor', 'test'],
+      roles: ['admin', 'user', 'ZhangKaijie'],
       title: '主页',
       icon: 'home',
       keepAlive: true
@@ -15,60 +15,71 @@ const asyncRoutesChildren = [
     component: () => import('../views/home/home.vue')
   },
   {
-    path: '/menu-1',
-    name: 'menu-1',
+    path: '/later',
+    name: 'later',
     meta: {
-      roles: ['admin', 'editor'],
-      title: '模块 - 1',
-      itemLabel: 'SOME LABEL',
-      icon: 'library_music',
+      roles: ['admin', 'user'],
+      title: '稍后阅读',
+      icon: 'watch_later',
+      keepAlive: true
+    },
+    component: () => import('../views/menu1/menu1-2')
+  },
+  {
+    path: '/subscribeList',
+    name: 'subscribeList',
+    meta: {
+      roles: ['admin', 'user'],
+      title: '订阅列表',
+      itemLabel: 'FEEDS',
+      icon: 'format_list_bulleted',
       isOpen: true
     },
-    component: () => import('../components/Layout/layout'),
-    children: [
-      {
-        path: 'menu-1-1',
-        name: 'menu-1-1',
-        meta: {
-          roles: ['admin', 'editor'],
-          title: '模块 1 - 1',
-          icon: 'filter_1'
-        },
-        component: () => import('../components/Layout/layout'),
-        children: [
-          {
-            path: 'menu-1-1-1',
-            name: 'menu-1-1-1',
-            meta: {
-              roles: ['admin', 'editor'],
-              title: '模块 1 - 1 - 1',
-              icon: 'flaky',
-              keepAlive: true
-            },
-            component: () => import('../views/menu1/menu1')
-          }
-        ]
-      },
-      {
-        path: 'menu-1-2',
-        name: 'menu-1-2',
-        meta: {
-          roles: ['admin', 'editor'],
-          title: '模块 1 - 2',
-          icon: 'filter_2',
-          keepAlive: true
-        },
-        component: () => import('../views/menu1/menu1-2')
-      }
-    ]
+    component: () => import('../views/menu1/menu1')
   },
+  // children: [
+  // {
+  //   path: 'menu-1-1',
+  //   name: 'menu-1-1',
+  //   meta: {
+  //     roles: ['admin', 'user'],
+  //     title: '模块 1 - 1',
+  //     icon: 'filter_1'
+  //   },
+  //   component: () => import('../components/Layout/layout'),
+  //   children: [
+  //     {
+  //       path: 'menu-1-1-1',
+  //       name: 'menu-1-1-1',
+  //       meta: {
+  //         roles: ['admin', 'user'],
+  //         title: '模块 1 - 1 - 1',
+  //         icon: 'flaky',
+  //         keepAlive: true
+  //       },
+  //       component: () => import('../views/menu1/menu1')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: 'menu-1-2',
+  //   name: 'menu-1-2',
+  //   meta: {
+  //     roles: ['admin', 'user'],
+  //     title: '模块 1 - 2',
+  //     icon: 'filter_2',
+  //     keepAlive: true
+  //   },
+  //   component: () => import('../views/menu1/menu1-2')
+  // }
+  // ]
   {
     path: '/menu-2',
     name: 'menu-2',
     meta: {
-      roles: ['admin', 'editor'],
-      title: '模块 2',
-      icon: 'extension'
+      roles: ['admin', 'user'],
+      title: '订阅管理',
+      icon: 'settings'
     },
     component: () => import('../views/menu2/menu-2-1')
   },
@@ -76,53 +87,53 @@ const asyncRoutesChildren = [
     path: '/menu-3',
     name: 'menu-3',
     meta: {
-      roles: ['admin', 'editor'],
-      title: '模块 - 3',
-      icon: 'filter_3',
+      roles: ['admin', 'user'],
+      title: '订阅市场',
+      icon: 'apps',
       isOpen: true
     },
-    component: () => import('../components/Layout/layout'),
-    children: [
-      {
-        path: 'menu3-1',
-        name: 'getting-started',
-        meta: {
-          roles: ['admin', 'editor'],
-          title: '模块 3 - 1',
-          icon: 'filter_2',
-          isOpen: true
-        },
-        component: () => import('../components/Layout/layout'),
-        children: [
-          {
-            path: 'menu3-1-1',
-            name: 'menu3-1-1',
-            meta: {
-              roles: ['admin', 'editor'],
-              title: '模块 3 - 1 - 1',
-              icon: 'filter_1',
-              keepAlive: true
-            },
-            component: () => import('../views/menu3/menu3')
-          }
-        ]
-      }
-    ]
+    component: () => import('../views/menu3/menu3')
+  // children: [
+  //   {
+  //     path: 'menu3-1',
+  //     name: 'getting-started',
+  //     meta: {
+  //       roles: ['admin', 'user'],
+  //       title: '模块 3 - 1',
+  //       icon: 'filter_2',
+  //       isOpen: true
+  //     },
+  //     component: () => import('../components/Layout/layout'),
+  //     children: [
+  //       {
+  //         path: 'menu3-1-1',
+  //         name: 'menu3-1-1',
+  //         meta: {
+  //           roles: ['admin', 'user'],
+  //           title: '模块 3 - 1 - 1',
+  //           icon: 'filter_1',
+  //           keepAlive: true
+  //         },
+  //         component: () => import('../views/menu3/menu3')
+  //       }
+  //     ]
+  //       }
+  //     ]
   },
-  {
-    path: 'http://www.quasarchs.com/vue-components/button',
-    name: 'external-link',
-    meta: {
-      roles: ['admin', 'editor'],
-      title: '外部链接/更多组件',
-      icon: 'send'
-    }
-  },
+  // {
+  //   path: 'http://www.quasarchs.com/vue-components/button',
+  //   name: 'external-link',
+  //   meta: {
+  //     roles: ['admin', 'user'],
+  //     title: '外部链接/更多组件',
+  //     icon: 'send'
+  //   }
+  // },
   {
     path: '/tableDetail/:id',
     name: 'tableDetail',
     meta: {
-      roles: ['admin', 'editor'],
+      roles: ['admin', 'user'],
       title: 'Treats 详情',
       icon: 'blur_linear',
       isHidden: true
@@ -133,7 +144,7 @@ const asyncRoutesChildren = [
     path: '*', // 此处需置于最底部
     redirect: '/NoFound404',
     meta: {
-      roles: ['admin', 'test'],
+      roles: ['admin', 'user'],
       isHidden: true
     }
   }

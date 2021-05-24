@@ -7,7 +7,7 @@ Vue.prototype.$title = ' | Vue Quasar'
 Vue.prototype.$SildeBar = 'hHh lpR fFf' // 风格二：lHh lpR fFf
 
 // axiois 中请求基地址，如果需要请在 axios/fetchData.js 中打开
-Vue.prototype.$baseURL = ''
+Vue.prototype.$baseURL = 'http://localhost:8888'
 
 // 请求超时时间
 Vue.prototype.$timeOut = 8000
